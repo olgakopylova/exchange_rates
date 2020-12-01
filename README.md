@@ -17,7 +17,7 @@ php init_db.php
 ```
 
 6. Run CRON task according to the selected local server.
-As example in OpenServer:
+For example in OpenServer:
 Settings->Task Scheduler
 ```bash
 0 0 * * *
