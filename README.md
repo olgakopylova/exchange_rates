@@ -24,4 +24,4 @@ Settings->Task Scheduler
 %YOUR_PATH%modules\wget\bin\wget.exe -q --no-cache http://localhost/exchange_rates/update_script.php
 ```
 
-6. Open browser and go to domainname.local (as example) 
+7. Open browser and go to domainname.local (as example) 
