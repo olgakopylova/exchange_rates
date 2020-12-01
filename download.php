@@ -5,7 +5,7 @@ if(!isset($currency)) $currency = new Currency();
 
 $file = $_SERVER['DOCUMENT_ROOT']."/exchange_rates/files/".time().".json";
 $handle=fopen($file, "w");
-$items = $currency->getRates();
+$items = $currency->getRates($_GET['dateStart'], $_GET['dateEnd'], $_GET['type']);
 fwrite($handle, json_encode($items));
 fclose($handle);
 if (file_exists($file)) {

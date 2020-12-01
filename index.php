@@ -20,6 +20,7 @@ if(!isset($data['type'])){
 
     $chart = Tpl::generateChart();
 
+
     echo Tpl::render('main', ['select' => $select, 'header' => $header, 'body' => $form, 'footer' => $footer, 'chart' => $chart]);
 }elseif($data['type']=="filter"){
     // Применение фильтров
@@ -29,7 +30,8 @@ if(!isset($data['type'])){
 
     $rows = Tpl::generateTable($items);
 
-    $chart = Tpl::generateChart($data['date_start'], $data['date_end'], $data['currency_type']);
+    if($data['currency_type']!=0)
+        $chart = Tpl::generateChart($data['date_start'], $data['date_end'], $data['currency_type']);
 
     echo json_encode(['content' => Tpl::render('table', [ 'rows' => $rows]), 'chart'=> $chart]);
 }elseif($data['type']=="update"){

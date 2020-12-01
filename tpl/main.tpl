@@ -59,17 +59,12 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary" id="show">Показать</button>
-                            <a class="btn btn-primary" href="/exchange_rates/download.php?" traget="_blank">Сохранить json</a>
+                            <a class="btn btn-primary" href="" onclick=" this.href='/exchange_rates/download.php?dateStart='+
+                                   $('#date_start').val()+'&dateEnd='+$('#date_end').val()+'&type='+$('#currency_type').val();"
+                                    traget="_blank">Сохранить json</a>
                         </form>
                     </div>
                     <div class="card" id="card-body">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <h4>Курс валют</h4>
-                                </div>
-                            </div>
-                        </div>
                         <?php echo $body;?>
                     </div>
                     <div class="card">
@@ -79,6 +74,9 @@
                                     <h4>График</h4>
                                 </div>
                             </div>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            График доступен для каждой валюты по отдельности. Пожалуйста, выберите в фильтре один тип валюты и период (необязательно).
                         </div>
                         <canvas id="lineChart"></canvas>
                     </div>
@@ -106,48 +104,46 @@
             </div>
         </div>
     <script>
+        tables_lang = {
+            "decimal": ",",
+            "thousands": " ",
+            "lengthMenu": "Показывать _MENU_ записей",
+            "zeroRecords": "Значение не найдено",
+            "info": "Страница _PAGE_ из _PAGES_",
+            "infoFiltered": "(найдено из _MAX_ записей)",
+            "emptyTable": "Нет записей",
+            "info": "Загружено _START_ - _END_ из _TOTAL_ записей",
+            "infoEmpty": "Показано 0 из 0 записей",
+            "infoPostFix": "",
+            "loadingRecords": "Загрузка...",
+            "processing": "Обработка...",
+            "search": "Поиск:",
+            "paginate": {
+                "first": "Первая",
+                "last": "Последняя",
+                "next": "Следующая",
+                "previous": "Предыдущая"
+            },
+            "aria": {
+                "sortAscending": ": сортировать по возрастанию",
+                "sortDescending": ": сортировать по убыванию"
+            }
+        };
+        var params = {
+            pagination: true,
+            responsive: true,
+            language: tables_lang,
+            columnDefs : [{targets:3, type:"date-eu"}],
+            sDom: '<"top"i>rt<"bottom"lp><"clear">',
+            bInfo: false,
+            bLengthChange: false
+        };
         $(document).ready( function () {
-            tables_lang = {
-                "decimal": ",",
-                "thousands": " ",
-                "lengthMenu": "Показывать _MENU_ записей",
-                "zeroRecords": "Значение не найдено",
-                "info": "Страница _PAGE_ из _PAGES_",
-                "infoFiltered": "(найдено из _MAX_ записей)",
-                "emptyTable": "Нет записей",
-                "info": "Загружено _START_ - _END_ из _TOTAL_ записей",
-                "infoEmpty": "Показано 0 из 0 записей",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка...",
-                "processing": "Обработка...",
-                "search": "Поиск:",
-                "paginate": {
-                    "first": "Первая",
-                    "last": "Последняя",
-                    "next": "Следующая",
-                    "previous": "Предыдущая"
-                },
-                "aria": {
-                    "sortAscending": ": сортировать по возрастанию",
-                    "sortDescending": ": сортировать по убыванию"
-                }
-            };
-            $('#currency').DataTable({
-                pagination: true,
-                responsive: true,
-                language: tables_lang,
-                columnDefs : [{targets:3, type:"date-eu"}],
-            });
+
+            $('#currency').DataTable(params);
             $.fn.dataTable.moment('DD.MM.YYYY');
         } );
-        //line
-        var ctxL = document.getElementById("lineChart").getContext('2d');
-        var myLineChart = new Chart(ctxL, {
-            type: 'line',
-            options: {
-                responsive: true
-            }
-        });
+
         $(document).on("submit", "form", function(event) {
             $('#send').attr('disabled', true);
             event.preventDefault();
@@ -163,12 +159,7 @@
                 {
                     if (!data['code']){
                         $('#card-body').html(data['content']);
-                        $('#currency').DataTable({
-                            pagination: true,
-                            responsive: true,
-                            language: tables_lang,
-                            columnDefs : [{targets:3, type:"date-eu"}]
-                        });
+                        $('#currency').DataTable(params);
                         var ctxL = document.getElementById("lineChart").getContext('2d');
                         var myLineChart = new Chart(ctxL, {
                             type: 'line',

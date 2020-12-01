@@ -1,3 +1,10 @@
+<div class="form-group">
+    <div class="row">
+        <div class="col-6">
+            <h4>Курс валют</h4>
+        </div>
+    </div>
+</div>
 <table id="currency" class="display" style="width:100%">
     <thead>
     <tr>

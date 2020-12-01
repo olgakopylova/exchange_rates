@@ -51,30 +51,36 @@ class Tpl
      */
     public static function generateChart($dateStart = null, $dateEnd = null, $type = null){
         $db = new DB();
-        $sql = "SELECT DISTINCT er.id, cd.name FROM exchange_rates er 
-        LEFT JOIN currencies_directory cd ON cd.id=er.id_currency";
-        $chart = [];
-        $items = $db->getAllData($sql);
         $filter = "";
-        if(isset($type)&&$type!=0)
+        $filter2 = "";
+        if(isset($type)&&$type!=0){
             $filter.=" AND cd.id=".$type;
+            $filter2.="WHERE cd.id=".$type;
+        }
         if($dateStart!=""&&$dateEnd!=""){
             $filter.=" AND er.date>=".strtotime($dateStart)." AND er.date<=".strtotime($dateEnd);
+            $filter2.=$filter;
         }
+        $sql = "SELECT DISTINCT cd.id, cd.name FROM exchange_rates er 
+        LEFT JOIN currencies_directory cd ON cd.id=er.id_currency ".$filter2;
+        $chart = ['labels'=>[], 'datasets'=>[]];
+        $items = $db->getAllData($sql);
         foreach ($items as $item){
             $sql = "SELECT from_unixtime(er.date, '%d.%m.%Y') date, er.value FROM exchange_rates er 
-        LEFT JOIN currencies_directory cd ON cd.id=er.id_currency WHERE er.id=".$item['id'].$filter;
+        LEFT JOIN currencies_directory cd ON cd.id=er.id_currency WHERE cd.id=".$item['id'].$filter." ORDER BY er.date ASC";
             $values = $db->getAllData($sql);
             $temp = ['labels'=>[],'datasets'=>['data'=>[]]];
             foreach ($values as $value){
-                array_push($temp['labels'], $value['date']);
+                if(array_search($value['date'], $chart['labels'])===false)
+                    array_push($chart['labels'], $value['date']);
                 array_push($temp['datasets']['data'], (float)$value['value']);
             }
-            $temp['datasets']['backgroundColor'] = ['rgba(105, 0, 132, .2)'];
-            $temp['datasets']['borderColor'] = ['rgba(200, 99, 132, .7)'];
+            $temp['datasets']['backgroundColor'] = ['rgba(0, 0, 0, 0)'];
+            $temp['datasets']['borderColor'] = ['rgba('.rand(1,255).', '.rand(1,255).', '.rand(1,255).', .7)'];
             $temp['datasets']['borderWidth'] = 2;
             $temp['datasets']['label'] = $item['name'];
-            array_push($chart, $temp);
+
+            array_push($chart['datasets'], $temp['datasets']);
         }
         return $chart;
     }
