@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+html,
+body {
+    height: 100%;
+}
+.header{
+    height: 50px;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.content {
+    flex: 1 0 auto;
+}
+.footer {
+    flex: 0 0 auto;
+    padding-left: 25px;
+}
+.card{
+    margin: 10px;
+    padding: 10px;
+}
+hr {
+    border: none;
+    background-color: #e9ecef;
+    height: 2px;
+    margin-right: 2%;
+    margin-left: 2%;
+}
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+    font-weight: bold;
+}
+h1{
+    text-align: center;
+}
+.jumbotron{
+    min-height: 2000px !important;
+    padding-top: 150px;
+}
+label{
+    font-weight: bold;
+}
+.navbar-brand{
+    white-space: normal !important;
+}
