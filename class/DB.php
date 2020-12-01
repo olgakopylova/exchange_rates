@@ -2,9 +2,9 @@
 
 class DB
 {
-    private $host = '127.0.0.1';
+    private $host = 'db';
     private $log = 'root';
-    private $pass = 'root';
+    private $pass = 'example';
     private $db;
 
     public function __construct($dbname='currency')

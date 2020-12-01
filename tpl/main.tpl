@@ -171,6 +171,7 @@
                         $('#send').attr('disabled', false);
                     }else{
                         alert(data['message']);
+                        location.href=location.href;
                     }
                 },
             });
